@@ -49,7 +49,7 @@ module.exports = function(grunt) {
             ws: false
         });
         var target = (proxyOption.https ? 'https://' : 'http://') + proxyOption.host + ':' + proxyOption.port;
-        console.log(target);
+
         if (validateProxyConfig(proxyOption)) {
             proxyOption.rules = utils.processRewrites(proxyOption.rewrite);
             utils.registerProxy({
