@@ -26,7 +26,6 @@ module.exports = function(grunt) {
         }
         return true;
     };
-
     utils.reset();
     utils.log = grunt.log;
     if (config) {
@@ -38,6 +37,7 @@ module.exports = function(grunt) {
     } else {
         proxyOptions = proxyOptions.concat(grunt.config('connect.proxies') || []);
     }
+
     proxyOptions.forEach(function(proxy) {
         proxyOption = _.defaults(proxy,  {
             port: 80,
@@ -48,11 +48,13 @@ module.exports = function(grunt) {
             rules: [],
             ws: false
         });
+        var target = (proxyOption.https ? 'https://' : 'http://') + proxyOption.host + ':' + proxyOption.port;
+        console.log(target);
         if (validateProxyConfig(proxyOption)) {
             proxyOption.rules = utils.processRewrites(proxyOption.rewrite);
             utils.registerProxy({
-              server: new httpProxy.HttpProxy({
-                target: proxyOption,
+              server: new httpProxy.createProxyServer({
+                target: target,
                 changeOrigin: proxyOption.changeOrigin,
                 enable : {
                     xforward: proxyOption.xforward // enables X-Forwarded-For
